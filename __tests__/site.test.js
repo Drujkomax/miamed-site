@@ -11,4 +11,9 @@ describe('Site files', () => {
     const code = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
     expect(() => new Function(code)).not.toThrow();
   });
+
+  test('add() returns numeric sum', () => {
+    const { add } = require('../main.js');
+    expect(add(2, 3)).toBe(5);
+  });
 });

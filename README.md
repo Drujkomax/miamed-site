@@ -2,6 +2,8 @@
 
 A simple website. This repository now includes automated tests using Jest.
 
+It also features a simple calculator on the homepage.
+
 ## Running Tests
 
 1. Install dependencies:
@@ -14,3 +16,4 @@ A simple website. This repository now includes automated tests using Jest.
    ```
 
 The tests verify that `index.html` contains a `<title>` element and that `main.js` can be loaded without syntax errors.
+An additional test confirms the calculator's `add()` function works correctly.
