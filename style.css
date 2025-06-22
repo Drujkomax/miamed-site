@@ -478,7 +478,7 @@ button{font-family:inherit;border:none;cursor:pointer;background:none;color:inhe
   .stat-number          { font-size: 1.7rem; }
 }
 
-```css
+
 /* ---------- 17. Burger-menu & mobile navigation --------------- */
 .burger {
   --size: 28px;
