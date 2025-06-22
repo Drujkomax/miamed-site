@@ -63,7 +63,10 @@ function updateROI(){
   document.getElementById('priceValue').textContent  = `$${price.toLocaleString()}`;
   document.getElementById('procValue').textContent   = procs;
   document.getElementById('marginValue').textContent = `$${margin}`;
-  document.getElementById('roiMonths').textContent   = `Окупаемость: ${months} мес.`;
+  const roiEl = document.getElementById('roiMonths');
+  roiEl.textContent = `Окупаемость: ${months} мес.`;
+  roiEl.classList.remove('green','yellow','red');
+  roiEl.classList.add(months<=6?'green':months<=12?'yellow':'red');
   document.getElementById('monthlyProfit').textContent = `Месячная прибыль: $${monthly.toLocaleString()}`;
   document.getElementById('yearlyProfit').textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
 }

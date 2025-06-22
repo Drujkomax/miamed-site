@@ -259,9 +259,14 @@ h2, h3, h4, h5, h6 { letter-spacing: 0.025em; }
 .roi-calculator .roi-input-group{flex:1 1 200px}
 .roi-calculator .roi-input-group .roi-controls{display:flex;align-items:center;gap:8px;margin-top:6px}
 .roi-calculator .manual-input{width:90px;padding:8px 6px;border-radius:7px;border:1px solid #223344;background:#1a2540;color:#EEE;font-size:.95rem}
+.green{color:#00FF6A}
+.yellow{color:#FFC400}
+.red{color:#FF4D4D}
 @media (max-width:600px){
   .roi-calculator{flex-direction:column;text-align:center}
   .roi-calculator p{margin:4px 0}
+  .roi-calculator input[type=range],
+  .roi-calculator .manual-input{max-width:100%;width:100%}
 }
 
 .video-wrapper{position:relative;padding-top:56.25%}
