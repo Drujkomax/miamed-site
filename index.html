@@ -1,4 +1,3 @@
-```html
 <!-- index_part1.html -->
 <!DOCTYPE html>
 <html lang="ru">
@@ -77,9 +76,9 @@
                             <li>📚 Обучение персонала и техническая поддержка 24/7</li>
                             <li>💰 Гарантированная окупаемость в течение 6-12 месяцев</li>
                         </ul>
-                        <button class="btn-neon btn-large" onclick="openModal('roiModal')" aria-label="Открыть калькулятор окупаемости">
+                        <a href="#roi" class="btn-neon btn-large" aria-label="Перейти к калькулятору окупаемости">
                             Получить расчёт
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -193,12 +192,6 @@
             </div>
         </section>
 <!-- END index_part2.html -->
-
-        <section id="categories" class="categories-section">
-            <div class="container">
-                <h2 class="section-title neon-text">Наши категории оборудования</h2>
-                <div class="categories  
-                ```html
 <!-- index_part3.html -->
         <section id="categories" class="categories-section">
             <div class="container">
@@ -368,6 +361,45 @@
             </div>
         </section>
 <!-- END index_part3.html -->
+<section id="roi" class="roi-section">
+    <div class="container">
+        <h2 class="neon-text">ROI-калькулятор</h2>
+        <div class="roi-calculator roi-advanced">
+            <div class="roi-input-group">
+                <label for="priceSlider">Стоимость оборудования:
+                    <span id="priceValue">10 000 $</span>
+                </label>
+                <div class="roi-controls">
+                    <input type="range" id="priceSlider" min="1000" max="500000" step="1000" value="10000">
+                    <input type="number" id="priceInput" min="1000" max="500000" step="1000" value="10000" class="manual-input">
+                </div>
+            </div>
+            <div class="roi-input-group">
+                <label for="procSlider">Кол-во процедур в месяц:
+                    <span id="procValue">1</span>
+                </label>
+                <div class="roi-controls">
+                    <input type="range" id="procSlider" min="1" max="1000" step="1" value="1">
+                    <input type="number" id="procInput" min="1" max="1000" step="1" value="1" class="manual-input">
+                </div>
+            </div>
+            <div class="roi-input-group">
+                <label for="marginSlider">Средняя маржа ($):
+                    <span id="marginValue">1</span>
+                </label>
+                <div class="roi-controls">
+                    <input type="range" id="marginSlider" min="1" max="1000" step="1" value="1">
+                    <input type="number" id="marginInput" min="1" max="1000" step="1" value="1" class="manual-input">
+                </div>
+            </div>
+            <div class="roi-results">
+                <p id="roiMonths">Окупаемость: 0 мес.</p>
+                <p id="monthlyProfit">Месячная прибыль: $0</p>
+                <p id="yearlyProfit">Годовая прибыль: $0</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- index_part4.html -->
         <section id="about" class="about-section">
@@ -560,6 +592,7 @@
             </div>
         </div>
     </div>
+
 
 </body>
 </html>
