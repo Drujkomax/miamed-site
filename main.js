@@ -204,3 +204,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }catch(err){console.warn('Lottie load error',err);}
     }
   })
+  });
