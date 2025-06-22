@@ -1,3 +1,114 @@
+
+// ----------------  UTILS  ----------------
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel, all=false) => all ? document.querySelectorAll(sel) : document.querySelector(sel);
+
+// ----------------  MODAL -----------------
+function openModal(id){
+  $( `#${id}` ).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  $( `#${id}` ).classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// закрытие по Esc / клику фона
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ $$('.modal.open',true).forEach(m=>closeModal(m.id)); }
+});
+$$('.modal',true).forEach(m=>m.addEventListener('click',e=>{
+  if(e.target===m) closeModal(m.id);
+}));
+
+// ----------------  ROI CALCULATORS  ----------------
+function initROI(calcEl){
+  const price = calcEl.querySelector('input[id^="price"]');
+  const proc  = calcEl.querySelector('input[id^="procedures"]');
+  const out   = calcEl.querySelector('p[id^="roiResult"]');
+  const priceVal = calcEl.querySelector('span[id^="priceValue"]');
+  const procVal  = calcEl.querySelector('span[id^="proceduresValue"]');
+  const monthly  = calcEl.querySelector('span[id^="monthlyProfit"]');
+  const yearly   = calcEl.querySelector('span[id^="yearlyProfit"]');
+  const MARGIN = 50; // $ маржа за процедуру
+
+  function update(){
+    priceVal.textContent = `$${Number(price.value).toLocaleString()}`;
+    procVal.textContent  = proc.value;
+    const months = Math.ceil((price.value*0.2)/(proc.value*MARGIN));
+    out.textContent = `Окупаемость: ${months} мес.`;
+    out.style.color = months<=6 ? '#00FF6A' : months<=12 ? '#FFC400' : '#FF4D4D';
+    if(monthly && yearly){
+      const monthlyProfit = proc.value*MARGIN;
+      monthly.textContent = `$${Number(monthlyProfit).toLocaleString()}`;
+      yearly.textContent  = `$${Number(monthlyProfit*12).toLocaleString()}`;
+    }
+  }
+  price.addEventListener('input',update); proc.addEventListener('input',update);
+  update();
+}
+
+let priceSlider, procSlider, marginSlider;
+let priceInput, procInput, marginInput;
+
+function updateROI(){
+  const price  = +priceSlider.value;
+  const procs  = +procSlider.value;
+  const margin = +marginSlider.value;
+  priceInput.value = price;
+  procInput.value  = procs;
+  marginInput.value = margin;
+  const months = Math.ceil(price / (procs * margin));
+  const monthly = procs * margin;
+  const yearly = monthly * 12;
+  document.getElementById('priceValue').textContent  = `$${price.toLocaleString()}`;
+  document.getElementById('procValue').textContent   = procs;
+  document.getElementById('marginValue').textContent = `$${margin}`;
+  const roiEl = document.getElementById('roiMonths');
+  roiEl.textContent = `Окупаемость: ${months} мес.`;
+  roiEl.classList.remove('green','yellow','red');
+  roiEl.classList.add(months<=6?'green':months<=12?'yellow':'red');
+  document.getElementById('monthlyProfit').textContent = `Месячная прибыль: $${monthly.toLocaleString()}`;
+  document.getElementById('yearlyProfit').textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // инициализируем базовые калькуляторы
+  $$('.roi-calculator:not(.roi-advanced)',true).forEach(initROI);
+
+  // продвинутый ROI-калькулятор
+  if($('.roi-advanced')){
+    priceSlider = document.getElementById('priceSlider');
+    procSlider  = document.getElementById('procSlider');
+    marginSlider = document.getElementById('marginSlider');
+    priceInput  = document.getElementById('priceInput');
+    procInput   = document.getElementById('procInput');
+    marginInput = document.getElementById('marginInput');
+
+    const pairs = [
+      [priceSlider, priceInput],
+      [procSlider,  procInput],
+      [marginSlider, marginInput]
+    ];
+    pairs.forEach(([slider,input])=>{
+      if(slider && input){
+        slider.addEventListener('input',()=>{input.value=slider.value;updateROI();});
+        input.addEventListener('input',()=>{slider.value=input.value;updateROI();});
+      }
+    });
+    updateROI();
+  }
+
+  // ----------------  SMOOTH SCROLL (offset для fixed header) -------------
+  $$('a[href^="#"]',true).forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(target){
+        e.preventDefault();
+        window.scrollTo({top:target.offsetTop-70,behavior:'smooth'});
+      }
+
 /* =========================================================================
    main.js — MiaMed landing (rewrite · 24-06-2025)  •  Часть 1/3
    -------------------------------------------------------------------------
