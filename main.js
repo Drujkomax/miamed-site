@@ -47,14 +47,21 @@ function initROI(calcEl){
   update();
 }
 
-function updateROI(){
-  const price  = +document.getElementById('priceSlider').value;
-  const procs  = +document.getElementById('procSlider').value;
-  const margin = +document.getElementById('marginSlider').value;
-  const base = price * procs;
-  const months = Math.ceil(price / (procs * margin));
+let priceSlider, procSlider, marginSlider;
+let priceInput, procInput, marginInput;
+
+function updateROI() {
+  const price  = +priceSlider.value;
+  const procs  = +procSlider.value;
+  const margin = +marginSlider.value;
+  priceInput.value = price;
+  procInput.value  = procs;
+  marginInput.value = margin;
+
+  const months = procs && margin ? Math.ceil(price / (procs * margin)) : 0;
   const monthly = procs * margin;
   const yearly = monthly * 12;
+
   document.getElementById('priceValue').textContent  = `$${price.toLocaleString()}`;
   document.getElementById('procValue').textContent   = procs;
   document.getElementById('marginValue').textContent = `$${margin}`;
@@ -63,16 +70,43 @@ function updateROI(){
   document.getElementById('yearlyProfit').textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
   // инициализируем базовые калькуляторы
-  $$('.roi-calculator:not(.roi-advanced)',true).forEach(initROI);
+  $$('.roi-calculator:not(.roi-advanced)', true).forEach(initROI);
 
   // продвинутый ROI-калькулятор
-  if($('.roi-advanced')){
-    ['priceSlider','procSlider','marginSlider'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.addEventListener('input',updateROI);
+  if ($('.roi-advanced')) {
+    priceSlider = document.getElementById('priceSlider');
+    procSlider  = document.getElementById('procSlider');
+    marginSlider = document.getElementById('marginSlider');
+    priceInput  = document.getElementById('priceInput');
+    procInput   = document.getElementById('procInput');
+    marginInput = document.getElementById('marginInput');
+
+    const pairs = [
+      [priceSlider, priceInput],
+      [procSlider,  procInput],
+      [marginSlider, marginInput]
+    ];
+    pairs.forEach(([slider, input]) => {
+      if (slider && input) {
+        slider.addEventListener('input', () => {
+          input.value = slider.value;
+          updateROI();
+        });
+        input.addEventListener('input', () => {
+          slider.value = input.value;
+          updateROI();
+        });
+      }
     });
+
+    // Один раз для всех слайдеров
+    ['priceSlider', 'procSlider', 'marginSlider'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateROI);
+    });
+
     updateROI();
   }
 
