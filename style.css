@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'KBAstrolyte';
-  src: url('fonts/kb_astrolyte.ttf') format('truetype');
+  font-family: 'Proto Sans 56';
+  src: url('fonts/3b6ce-protosans563.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -25,7 +25,7 @@ h1, h2, h3, h4, h5, h6,
 .hit-card,
 .footer,
 .modal-content {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
+  font-family: 'Proto Sans 56', Arial, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.025em;
 }
@@ -88,7 +88,7 @@ h2, h3, h4, h5, h6 { letter-spacing: 0.025em; }
 
 /* Кнопки */
 .btn-neon {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
+  font-family: 'Proto Sans 56', Arial, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.025em;
   background: var(--c-primary);
@@ -148,7 +148,7 @@ h2, h3, h4, h5, h6 { letter-spacing: 0.025em; }
 
 /* Карточки категорий - специальные стили */
 .category-card {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
+  font-family: 'Proto Sans 56', Arial, sans-serif !important;
   font-weight: normal !important;
   letter-spacing: 0.025em;
   text-align: center;
