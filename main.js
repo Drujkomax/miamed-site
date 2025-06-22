@@ -50,18 +50,16 @@ function initROI(calcEl){
 let priceSlider, procSlider, marginSlider;
 let priceInput, procInput, marginInput;
 
-function updateROI() {
+function updateROI(){
   const price  = +priceSlider.value;
   const procs  = +procSlider.value;
   const margin = +marginSlider.value;
   priceInput.value = price;
   procInput.value  = procs;
   marginInput.value = margin;
-
-  const months = procs && margin ? Math.ceil(price / (procs * margin)) : 0;
+  const months = Math.ceil(price / (procs * margin));
   const monthly = procs * margin;
   const yearly = monthly * 12;
-
   document.getElementById('priceValue').textContent  = `$${price.toLocaleString()}`;
   document.getElementById('procValue').textContent   = procs;
   document.getElementById('marginValue').textContent = `$${margin}`;
@@ -70,12 +68,13 @@ function updateROI() {
   document.getElementById('yearlyProfit').textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Инициализация базовых ROI-калькуляторов
+document.addEventListener('DOMContentLoaded',()=>{
   // инициализируем базовые калькуляторы
-  $$('.roi-calculator:not(.roi-advanced)', true).forEach(initROI);
+  $$('.roi-calculator:not(.roi-advanced)',true).forEach(initROI);
 
   // продвинутый ROI-калькулятор
-  if ($('.roi-advanced')) {
+  if($('.roi-advanced')){
     priceSlider = document.getElementById('priceSlider');
     procSlider  = document.getElementById('procSlider');
     marginSlider = document.getElementById('marginSlider');
@@ -88,7 +87,68 @@ document.addEventListener('DOMContentLoaded', () => {
       [procSlider,  procInput],
       [marginSlider, marginInput]
     ];
-    pairs.forEach(([slider, input]) => {
+    pairs.forEach(([slider,input])=>{
+      if(slider && input){
+        slider.addEventListener('input',()=>{input.value=slider.value;updateROI();});
+        input.addEventListener('input',()=>{slider.value=input.value;updateROI();});
+      }
+    });
+    updateROI();
+  }
+
+let priceSlider, procSlider, marginSlider;
+let priceInput, procInput, marginInput;
+
+function updateROI() {
+  if (!priceSlider || !procSlider || !marginSlider ||
+      !priceInput || !procInput || !marginInput) return;
+
+  const price  = +priceSlider.value;
+  const procs  = +procSlider.value;
+  const margin = +marginSlider.value;
+
+  priceInput.value = price;
+  procInput.value  = procs;
+  marginInput.value = margin;
+
+  const months = procs && margin ? Math.ceil(price / (procs * margin)) : 0;
+  const monthly = procs * margin;
+  const yearly = monthly * 12;
+
+  const priceValue  = document.getElementById('priceValue');
+  const procValue   = document.getElementById('procValue');
+  const marginValue = document.getElementById('marginValue');
+  const roiMonths   = document.getElementById('roiMonths');
+  const monthlyProfit = document.getElementById('monthlyProfit');
+  const yearlyProfit  = document.getElementById('yearlyProfit');
+
+  if (priceValue)  priceValue.textContent  = `$${price.toLocaleString()}`;
+  if (procValue)   procValue.textContent   = procs;
+  if (marginValue) marginValue.textContent = `$${margin}`;
+  if (roiMonths)   roiMonths.textContent   = `Окупаемость: ${months} мес.`;
+  if (monthlyProfit) monthlyProfit.textContent = `Месячная прибыль: $${monthly.toLocaleString()}`;
+  if (yearlyProfit)  yearlyProfit.textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Инициализация базовых калькуляторов
+  $$('.roi-calculator:not(.roi-advanced)', true).forEach(initROI);
+
+  // Инициализация продвинутого калькулятора
+  const adv = $('.roi-advanced');
+  if (adv) {
+    priceSlider = document.getElementById('priceSlider');
+    procSlider  = document.getElementById('procSlider');
+    marginSlider = document.getElementById('marginSlider');
+    priceInput  = document.getElementById('priceInput');
+    procInput   = document.getElementById('procInput');
+    marginInput = document.getElementById('marginInput');
+
+    [
+      [priceSlider, priceInput],
+      [procSlider,  procInput],
+      [marginSlider, marginInput]
+    ].forEach(([slider, input]) => {
       if (slider && input) {
         slider.addEventListener('input', () => {
           input.value = slider.value;
@@ -99,12 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
           updateROI();
         });
       }
-    });
-
-    // Один раз для всех слайдеров
-    ['priceSlider', 'procSlider', 'marginSlider'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('input', updateROI);
     });
 
     updateROI();
@@ -149,4 +203,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }catch(err){console.warn('Lottie load error',err);}
     }
-  });
+  })
