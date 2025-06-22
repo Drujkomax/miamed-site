@@ -1,254 +1,463 @@
+/*===================================================================
+  MiaMed — style.css  |  Part 1 of 3   (rewrite v3 · 24‑06‑2025)
+  ------------------------------------------------------------------
+  Содержимое первой трети файла. Охватывает:
+    1) Подключение шрифта KBAstrolyte
+    2) CSS‑переменные (цвета, размеры, шрифты, эффекты)
+    3) Глобальный reset + базовая типографика
+    4) Утилиты (visually‑hidden, text‑gradient, neon‑btn, gap‑xs/‑sm)
+    5) Header (desktop + mobile burger)
+    6) Hero‑секция (адаптивная сетка + CTA‑кнопки)
+  ------------------------------------------------------------------
+  ⚠️  Две оставшиеся части (categories→ROI, about→footer) будут
+     добавлены после утверждения.
+===================================================================*/
+
+/* ---------- 1. Font Face ---------- */
 @font-face {
   font-family: 'KBAstrolyte';
   src: url('fonts/kbastrolyte.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;
+  font-style : normal;
   font-display: swap;
 }
 
-:root{
-  --c-primary:#00E1FF;
-  --c-dark:#182438;
-  --c-accent:#7C3BFF;
-  --gap:clamp(20px,3vw,48px);
-  --radius:18px;
+/* ---------- 2. CSS Variables ---------- */
+:root {
+  /* Palette */
+  --c-primary : #00E1FF;
+  --c-accent  : #7C3BFF;
+  --c-dark    : #182438;
+  --c-bg      : #232F47;
+  --c-bg-alt  : #1A2540;
+  --c-text    : #E9EEF5;
+  --c-muted   : #9DB0C7;
+
+  /* Layout */
+  --radius    : 18px;
+  --gap       : clamp(20px, 3vw, 48px);
+  --header-h  : 72px;
+
+  /* Typography */
+  --font-main : 'KBAstrolyte', Arial, sans-serif;
+  --fs-base   : 16px;
 }
 
-body,
-input,
-button,
-select,
-textarea,
-h1, h2, h3, h4, h5, h6,
-.nav-link,
-.btn-outline,
-.hit-card,
-.footer,
-.modal-content {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: 0.025em;
-}
-
+/* ---------- 3. Global Reset ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:var(--fs-base)}
 body{
-  color: #e9eef5;
-  background: #182438;
+  font-family:var(--font-main);
+  color:var(--c-text);
+  background:var(--c-dark);
   line-height:1.55;
   overflow-x:hidden;
 }
-body::before{
-  content:'';
-  position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background:url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 100h200M100 0v200' stroke='%2300e1ff' stroke-opacity='.04'/%3E%3C/svg%3E") repeat;
-}
+img,svg{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit}
 
-section, .consultation-section, .about, .video-section, .footer {
-  margin-block: 48px 48px;
-  padding: 40px 0;
+/* ---------- 4. Utility Classes ---------- */
+.visually-hidden{position:absolute!important;clip:rect(0 0 0 0);clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+.text-gradient{background:linear-gradient(90deg,var(--c-primary),var(--c-accent));-webkit-background-clip:text;color:transparent}
+.neon-btn{
+  display:inline-block;padding:14px 32px;border-radius:var(--radius);
+  background:var(--c-primary);color:var(--c-dark);font-weight:600;
+  transition:transform .2s,box-shadow .2s;
 }
-.container{max-width:1280px;margin-inline:auto;padding-inline:32px}
-@media (max-width: 600px) {
-  section, .consultation-section, .about, .video-section, .footer {
-    padding: 20px 0;
-    margin-block: 24px 24px;
-  }
-  .container {padding-inline: 12px;}
-}
+.neon-btn:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 0 16px var(--c-primary)}
+.gap-xs{margin-top:8px}.gap-sm{margin-top:16px}.gap-md{margin-top:32px}
 
-/* HEADER */
+/* ---------- 5. Header ---------- */
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(24,36,56,.82);backdrop-filter:blur(8px);
+  position:fixed;inset:0 0 auto;z-index:1000;height:var(--header-h);
+  backdrop-filter:blur(12px);background:rgba(24,36,56,.82);
+  display:flex;align-items:center;justify-content:space-between;
+  padding-inline:clamp(16px,4vw,56px);
 }
-.header-content{display:flex;align-items:center;justify-content:space-between;padding:18px var(--gap)}
-.nav-link{margin-inline:12px;text-decoration:none;color:#e9eef5;font-size:.98rem;}
-.nav-link:hover{color:var(--c-primary);}
+.logo{font-size:1.4rem;font-weight:700;color:var(--c-primary)}
+.nav{display:flex;align-items:center;gap:24px;font-size:.95rem}
+.nav a{padding:4px 6px;transition:color .2s}
+.nav a:hover{color:var(--c-primary)}
 
-/* HERO */
-.hero{padding:calc(100px + 4vw) 0 var(--gap)}
-.hero-content{display:flex;flex-direction:column-reverse;align-items:center;gap:var(--gap)}
-.hero-animation canvas{max-width:300px;width:100%;height:auto}
-.hero-bullets{list-style:none;margin-block:var(--gap)}
-.hero-bullets li{margin-bottom:8px}
+/* Burger */
+.burger{display:none;width:32px;height:24px;flex-direction:column;justify-content:space-between;cursor:pointer}
+.burger span{height:3px;background:#FFF;border-radius:2px;transition:.3s}
+@media(max-width:840px){
+  .burger{display:flex}
+  .nav{position:fixed;inset:var(--header-h) 0 0;background:var(--c-bg);flex-direction:column;gap:28px;padding-top:32px;transform:translateY(-100%);transition:.35s}
+  .nav.open{transform:none}
+}
+.burger.open span:nth-child(1){transform:translateY(10px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-10px) rotate(-45deg)}
+
+/* ---------- 6. Hero Section ---------- */
+.hero{
+  padding-top:calc(var(--header-h) + 80px);
+  padding-bottom:var(--gap);
+  display:grid;gap:var(--gap);
+}
 @media(min-width:992px){
-  .hero-content{flex-direction:row;justify-content:space-between}
-  .hero-text{max-width:540px}
+  .hero{grid-template-columns:1fr 1fr;align-items:center}
+}
+.hero-text h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:700;line-height:1.2}
+.hero-text p{margin-top:16px;font-size:1.05rem;max-width:540px;color:var(--c-muted)}
+.hero-cta{margin-top:32px;display:flex;flex-wrap:wrap;gap:20px}
+.hero-animation canvas{max-width:340px;width:100%;margin-inline:auto}
+/*======================================================================
+  MiaMed — style.css  |  Часть 2 из 3   (Categories → ROI → Benefits)
+  ----------------------------------------------------------------------
+  Разделы:
+    7) Categories-grid + card
+    8) Hits (featured equipment)
+    9) ROI-калькуляторы
+   10) Блок преимуществ (benefits)
+  ======================================================================*/
+
+/* ---------- 7. Categories ------------------------------------------ */
+.categories-section {
+  padding-block: var(--gap-xl);
+}
+.categories-grid {
+  display: grid;
+  gap: var(--gap-lg);
+}
+@media (min-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* ЛОГО, ЗАГОЛОВКИ, ГЛАВНАЯ CTA — только цвет */
-.logo, .cta-main, h1, h2, h3, h4, h5, h6 {
-  color: var(--c-primary) !important;
-  text-shadow: none !important;
-  font-weight: normal !important;
-  letter-spacing: 0.04em;
-}
-
-/* Прочие заголовки */
-h2, h3, h4, h5, h6 { letter-spacing: 0.025em; }
-
-/* Кнопки */
-.btn-neon {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: 0.025em;
-  background: var(--c-primary);
-  color: var(--c-dark) !important;
-  border: none;
-  border-radius: var(--radius);
-  padding: 13px 30px;
-  cursor: pointer;
-  box-shadow: none;
-  font-size: 1.09rem;
-  letter-spacing: 0.06em;
-  transition: background .3s, color .3s, transform .3s;
-}
-.btn-neon:hover {
-  background: #6cf1ff;
-  color: #121d2a !important;
-  transform: scale(1.04);
-  box-shadow: none;
-}
-
-.btn-outline {
-  background: transparent;
-  color: #00E1FF;
-  border: 2px solid #00E1FF;
-  border-radius: var(--radius);
-  padding: 10px 22px;
-  box-shadow: none;
-  font-weight: normal;
-  letter-spacing: 0.06em;
-  transition: background .3s, color .3s;
-}
-.btn-outline:hover {
-  background: #00E1FF;
-  color: #182438;
-}
-
-/* GRID */
-.categories-grid,
-.hits-grid,
-.benefits-grid{display:grid;gap:32px}
-@media(min-width:768px){
-  .categories-grid{grid-template-columns:repeat(3,1fr)}
-  .hits-grid{grid-template-columns:repeat(3,1fr)}
-  .benefits-grid{grid-template-columns:repeat(4,1fr)}
-}
-
-/* КАРТОЧКИ */
-.category-card,
-.hit-card{
-  background:#232f47;
-  border-radius:var(--radius);
-  padding:26px 18px;
-  transition:box-shadow .2s, transform .2s, color .3s, text-shadow .3s;
-  box-shadow:0 2px 8px #121d2a22;
-  font-weight: normal;
-}
-
-/* Карточки категорий - специальные стили */
 .category-card {
-  font-family: 'KBAstrolyte', Arial, sans-serif !important;
-  font-weight: normal !important;
-  letter-spacing: 0.025em;
+  background: var(--c-bg);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px 22px;
   text-align: center;
-  color: #ffffff;
-  font-size: 1.15rem;
+  transition: transform .2s, box-shadow .25s;
+  cursor: pointer;
+  font-family: 'KBAstrolyte', Arial, sans-serif;
 }
 .category-card:hover {
-  box-shadow: 0 0 20px #00e1ff60, 0 0 40px #00e1ff30;
-  transform: translateY(-4px) scale(1.02);
-  color: #ffffff;
-  text-shadow: 0 0 8px #00e1ff80;
+  transform: translateY(-4px);
+  box-shadow: 0 0 18px #00e1ff40;
+}
+.category-icon {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+  color: var(--c-primary);
 }
 
-/* Карточки хитов - обычные стили */
-.hit-card:hover{
-  box-shadow:0 0 14px #00e1ff18;
-  transform: translateY(-2px) scale(1.01);
+/* ---------- 8. Hits (featured equipment) --------------------------- */
+.hits-section {
+  padding-block: var(--gap-xl);
 }
-
-.category-icon{
-  font-size:2.2rem;
-  margin-bottom:12px;
-  color: #ffffff;
+.hits-grid {
+  display: grid;
+  gap: var(--gap-lg);
 }
-
+@media (min-width: 768px) {
+  .hits-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 .hit-card {
-  min-height: 390px;
-  max-width: 340px;
-  margin-inline: auto;
+  background: var(--c-bg-alt);
+  border-radius: var(--radius-lg);
+  padding: 26px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  transition: transform .2s, box-shadow .25s;
+}
+.hit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px #00e1ff25;
 }
 .hit-image img {
   width: 100%;
-  aspect-ratio: 16/10;
-  max-height: 180px;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   border-radius: 14px;
-  margin-bottom: 10px;
-}
-
-.hit-title,
-.hit-features,
-.benefit-card,
-.form-block label,
-.roi-block label {
   margin-bottom: 12px;
 }
-.hit-features{margin-block:8px 16px;font-size:.92rem;display:flex;flex-wrap:wrap;gap:8px;}
-.feature{background:rgba(0,225,255,.10);padding:4px 8px;border-radius:6px;}
-
-.benefit-card{
-  text-align:center;
-  padding:var(--gap);
-  background:#253659;
-  border-radius:var(--radius);
-  box-shadow: 0 2px 8px #121d2a12;
+.hit-title {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+  text-align: center;
 }
-.benefit-icon{font-size:2rem;margin-bottom:10px}
+.hit-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-block: 10px 14px;
+  font-size: .9rem;
+}
+.feature-tag {
+  padding: 4px 10px;
+  background: #00e1ff1a;
+  border-radius: 6px;
+}
 
-.consultation-section {
-  background: #232f47;
-  border-radius: 22px;
-  box-shadow: 0 2px 32px 0 #121d2a18;
-  margin-block: 40px;
-  padding: 40px 24px;
+/* ---------- 9. ROI-калькуляторы ------------------------------------ */
+/* 9-a) Общие стили */
+.roi-calculator {
+  background: var(--c-bg);
+  border-radius: var(--radius-xl);
+  padding: var(--gap-lg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-lg);
+  color: var(--c-text);
+}
+.roi-calculator .slider-group {
+  flex: 1 1 260px;
+  min-width: 240px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 10px;
+}
+.roi-calculator label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .95rem;
+}
+.roi-calculator input[type='range'] {
+  -webkit-appearance: none;
+  width: 100%;
+  max-width: 420px;
+  height: 6px;
+  border-radius: 4px;
+  background: #0d1624;
+  cursor: pointer;
+}
+.roi-calculator input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-primary);
+  border: 2px solid #fff;
+  transition: transform .15s;
+}
+.roi-calculator input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+/* 9-b) Расширенный ROI (3-slider) */
+.roi-advanced .roi-results {
+  flex: 1 1 100%;
+  background: var(--c-bg-alt);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.roi-advanced .roi-results p {
+  margin: 0;
+  font-size: 1.06rem;
+}
+.roi-advanced .green  { color: #09d68d; }
+.roi-advanced .yellow { color: #ffc400; }
+.roi-advanced .red    { color: #ff6161; }
+
+/* 9-c) Базовый ROI (2-slider) */
+.roi-simple .roi-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+/* ---------- 10. Benefits ------------------------------------------ */
+.benefits-section {
+  padding-block: var(--gap-xl);
+}
+.benefits-grid {
+  display: grid;
+  gap: var(--gap-lg);
+}
+@media (min-width: 768px) {
+  .benefits-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.benefit-card {
+  background: var(--c-bg-alt);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-lg);
+  text-align: center;
+  box-shadow: 0 2px 8px #121d2a18;
+  transition: transform .18s, box-shadow .22s;
+}
+.benefit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 16px #00e1ff30;
+}
+.benefit-icon {
+  font-size: 2.1rem;
+  color: var(--c-primary);
+  margin-bottom: 12px;
+}
+.benefit-title {
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  /* мобайл-оптимизация ROI-калькулятора */
+  .roi-calculator {
+    padding: var(--gap-md);
+  }
+  .roi-advanced .roi-results {
+    font-size: .95rem;
+  }
+  .categories-grid,
+  .hits-grid,
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/*======================================================================
+  MiaMed — style.css  |  Часть 3 из 3   (About → Footer + Utilities)
+  ======================================================================*/
+
+/* ---------- 11. About ------------------------------------------------ */
+.about-section {
+  padding-block: var(--gap-xl);
+}
+.about-content {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--gap-lg);
+  align-items: center;
+}
+.about-text {
+  max-width: 580px;
+}
+.about-stats {
+  display: flex;
+  gap: var(--gap-lg);
+  margin-block: var(--gap-md);
+}
+.stat-block   { text-align: center; }
+.stat-number  { font-size: 2rem; font-weight: 600; color: var(--c-primary); }
+
+@media (min-width: 992px) {
+  .about-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* ---------- 12. Consultation & Lead-form ----------------------------- */
+.consultation-section {
+  background: var(--c-bg);
+  border-radius: var(--radius-xl);
+  padding: var(--gap-xl);
+  box-shadow: 0 4px 32px #121d2a22;
 }
 .consultation-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
-  background: transparent;
+  gap: var(--gap-lg);
 }
-.form-block, .roi-block {
+.form-block,
+.roi-block {
   flex: 1 1 320px;
-  background: #253659;
-  border-radius: 18px;
-  box-shadow: 0 0 10px #121d2a11;
-  padding: 32px 20px;
-  margin-bottom: 0;
+  background: var(--c-bg-alt);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-lg);
 }
-@media (max-width: 800px) {
-  .consultation-content {
-    flex-direction: column;
-  }
-  .form-block, .roi-block {
-    width: 100%;
-    padding: 24px 10px;
+.lead-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.lead-form input,
+.lead-form select {
+  padding: 12px 14px;
+  border: 1px solid #223344;
+  border-radius: 7px;
+  background: #1f2a48;
+  color: var(--c-text);
+  font-size: 1rem;
+}
+
+/* ---------- 13. Footer ---------------------------------------------- */
+.footer {
+  background: #131e2b;
+  padding: 60px 0 36px;
+  color: var(--c-muted);
+  font-size: .95rem;
+}
+.footer-content {
+  display: grid;
+  gap: var(--gap-lg);
+}
+.footer-nav ul { list-style: none; margin: 0; padding: 0; }
+.footer-nav a  {
+  color: var(--c-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-nav a:hover { color: var(--c-primary); }
+
+.footer-social .social-links {
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.footer-bottom {
+  margin-top: var(--gap-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (min-width: 768px) {
+  .footer-content { grid-template-columns: repeat(4, 1fr); }
+  .footer-bottom  {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
-.lead-form .form-group{display:flex;flex-direction:column;margin-bottom:16px}
-.lead-form input, .lead-form select{
-  padding:12px 14px;border-radius:7px;border:1px solid #223344;
-  background:#1a2540;color:#EEE;
-  font-size:1rem;
+
+/* ---------- 14. Modals ---------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal.open { display: flex; }
+
+.modal-content {
+  background: var(--c-bg-alt);
+  padding: 36px 30px;
+  border-radius: 24px;
+  max-width: 440px;
+  width: 90%;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
 }
 .roi-block{flex:1;background:#1a2540;padding:var(--gap);border-radius:var(--radius)}
 .roi-input-group{margin-bottom:12px;font-size:.95rem}
@@ -271,33 +480,125 @@ h2, h3, h4, h5, h6 { letter-spacing: 0.025em; }
   .roi-calculator .manual-input{max-width:100%;width:100%}
 }
 
-.video-wrapper{position:relative;padding-top:56.25%}
-.video-wrapper iframe{position:absolute;inset:0;width:100%;height:100%}
 
-.about-content{display:flex;flex-direction:column-reverse;gap:var(--gap);align-items:center}
-.about-text{max-width:600px}
-.about-stats{display:flex;gap:var(--gap);margin-block:var(--gap)}
-.stat-number{font-size:2rem}
-@media(min-width:992px){
-  .about-content{flex-direction:row;justify-content:space-between}
+/* ---------- 15. Reveal Animation ------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .6s, transform .6s;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
 }
 
-.footer{padding:60px 0 36px;background:#131e2b}
-.footer-content{display:grid;gap:var(--gap);}
-.footer-nav ul{list-style:none;margin-top:8px}
-.footer-nav a{color:#9db0c7;text-decoration:none;font-size:.98rem;}
-.footer-social .social-links{display:flex;gap:18px;margin-top:8px}
-.footer-bottom{margin-top:var(--gap);display:flex;flex-direction:column;gap:10px;font-size:.88rem;color:#9db0c7}
-@media(min-width:768px){
-  .footer-content{grid-template-columns:1fr 1fr 1fr 1fr}
-  .footer-bottom{flex-direction:row;justify-content:space-between;align-items:center}
+/* ---------- 16. Small-screen tweaks --------------------------------- */
+@media (max-width: 640px) {
+  .consultation-section { padding: var(--gap-lg); }
+  .footer               { padding: 40px 0 24px; }
+  .stat-number          { font-size: 1.7rem; }
 }
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:2000}
-.modal.open{display:flex}
-.modal-content{background:#253659;padding:36px 30px;border-radius:24px;max-width:420px;width:90%}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.modal-close{background:none;border:none;font-size:1.8rem;color:#FFF;cursor:pointer}
 
-.reveal{opacity:0;transform:translateY(40px);transition:.6s}
-.reveal.visible{opacity:1;transform:none}
+/* ---------- 17. Burger-menu & mobile navigation --------------- */
+.burger {
+  --size: 28px;
+  width: var(--size);
+  height: var(--size);
+  cursor: pointer;
+  position: relative;
+  z-index: 1100;
+}
+.burger span,
+.burger::before,
+.burger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: #fff;
+  transition: transform .35s, opacity .35s;
+}
+.burger span        { top: 50%; transform: translateY(-50%); }
+.burger::before     { top: 5px; }
+.burger::after      { bottom: 5px; }
+.burger.open span   { opacity: 0; }
+.burger.open::before{ transform: translateY(9px) rotate(45deg); }
+.burger.open::after { transform: translateY(-9px) rotate(-45deg); }
+
+.mobile-nav {
+  position: fixed;
+  inset: 0;
+  background: rgba(24,36,56,.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-lg);
+  transform: translateX(-100%);
+  transition: transform .4s ease;
+  z-index: 1050;
+}
+.mobile-nav.open { transform: translateX(0); }
+.mobile-nav a {
+  color: #fff;
+  font-size: 1.4rem;
+  text-decoration: none;
+  font-family: 'KBAstrolyte', Arial, sans-serif;
+}
+
+/* ---------- 18. Utility helpers ------------------------------------ */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0);
+  border: 0;
+}
+.text-gradient {
+  background: linear-gradient(90deg,#00E1FF 0%,#7C3BFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.neon-btn {
+  color: var(--c-dark);
+  background: var(--c-primary);
+  border-radius: var(--radius-md);
+  padding: 12px 28px;
+  box-shadow: 0 0 10px #00e1ff6e;
+  transition: box-shadow .25s, transform .22s;
+}
+.neon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px #00e1ffb0;
+}
+
+.gap-xs { gap: 4px 8px; }
+.gap-sm { gap: 8px 14px; }
+.gap-md { gap: var(--gap-md); }
+.gap-lg { gap: var(--gap-lg); }
+.gap-xl { gap: var(--gap-xl); }
+
+/* ---------- 19. Keyframes & effects -------------------------------- */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px #00e1ff60; }
+  50%      { box-shadow: 0 0 14px #00e1ffb0; }
+}
+.glow { animation: pulse-glow 2.5s infinite ease-in-out; }
+
+@keyframes fade-in-up {
+  0%   { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-in-up .7s ease forwards; }
+
+/* ---------- 20. Print friendly tweaks ------------------------------ */
+@media print {
+  *, *::before, *::after { background: none !important; box-shadow: none !important; }
+  a[href]::after        { content: ' (' attr(href) ')'; font-size: .9em; }
+  .burger, .mobile-nav, video, canvas { display: none !important; }
+}
+
+/* ==========================  End  =================================== */
