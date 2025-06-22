@@ -1,0 +1,93 @@
+// ----------------  UTILS  ----------------
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel, all=false) => all ? document.querySelectorAll(sel) : document.querySelector(sel);
+
+// ----------------  MODAL -----------------
+function openModal(id){
+  $( `#${id}` ).classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  $( `#${id}` ).classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// закрытие по Esc / клику фона
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ $$('.modal.open',true).forEach(m=>closeModal(m.id)); }
+});
+$$('.modal',true).forEach(m=>m.addEventListener('click',e=>{
+  if(e.target===m) closeModal(m.id);
+}));
+
+// ----------------  ROI CALCULATORS  ----------------
+function initROI(calcEl){
+  const price = calcEl.querySelector('input[id^="price"]');
+  const proc  = calcEl.querySelector('input[id^="procedures"]');
+  const out   = calcEl.querySelector('p[id^="roiResult"]');
+  const priceVal = calcEl.querySelector('span[id^="priceValue"]');
+  const procVal  = calcEl.querySelector('span[id^="proceduresValue"]');
+  const monthly  = calcEl.querySelector('span[id^="monthlyProfit"]');
+  const yearly   = calcEl.querySelector('span[id^="yearlyProfit"]');
+  const MARGIN = 50; // $ маржа за процедуру
+
+  function update(){
+    priceVal.textContent = `$${Number(price.value).toLocaleString()}`;
+    procVal.textContent  = proc.value;
+    const months = Math.ceil((price.value*0.2)/(proc.value*MARGIN));
+    out.textContent = `Окупаемость: ${months} мес.`;
+    out.style.color = months<=6 ? '#00FF6A' : months<=12 ? '#FFC400' : '#FF4D4D';
+    if(monthly && yearly){
+      const monthlyProfit = proc.value*MARGIN;
+      monthly.textContent = `$${Number(monthlyProfit).toLocaleString()}`;
+      yearly.textContent  = `$${Number(monthlyProfit*12).toLocaleString()}`;
+    }
+  }
+  price.addEventListener('input',update); proc.addEventListener('input',update);
+  update();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // инициализируем все калькуляторы
+  $$('.roi-calculator',true).forEach(initROI);
+
+  // ----------------  SMOOTH SCROLL (offset для fixed header) -------------
+  $$('a[href^="#"]',true).forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if(target){
+        e.preventDefault();
+        window.scrollTo({top:target.offsetTop-70,behavior:'smooth'});
+      }
+    });
+  });
+
+  // ----------------  REVEAL ON SCROLL  ----------------
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(ent=>{
+      if(ent.isIntersecting){
+        ent.target.classList.add('visible');
+        io.unobserve(ent.target);
+      }
+    });
+  },{threshold:.2});
+  $$('.reveal',true).forEach(el=>io.observe(el));
+
+  // ----------------  LOTTIE  ----------------
+  const canvas = $('#lottie-heart');
+  if(canvas){
+    try{
+      import('https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js')
+        .then((module)=>{ // Access the entire module
+          module.loadAnimation({ // Access loadAnimation directly from the module
+            container:canvas,
+            renderer:'canvas',
+            loop:true,
+            autoplay:true,
+            path:canvas.dataset.src
+          });
+        });
+      }catch(err){console.warn('Lottie load error',err);}
+    }
+  });
