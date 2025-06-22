@@ -47,9 +47,53 @@ function initROI(calcEl){
   update();
 }
 
+let priceSlider, procSlider, marginSlider;
+let priceInput, procInput, marginInput;
+
+function updateROI(){
+  const price  = +priceSlider.value;
+  const procs  = +procSlider.value;
+  const margin = +marginSlider.value;
+  priceInput.value = price;
+  procInput.value  = procs;
+  marginInput.value = margin;
+  const months = Math.ceil(price / (procs * margin));
+  const monthly = procs * margin;
+  const yearly = monthly * 12;
+  document.getElementById('priceValue').textContent  = `$${price.toLocaleString()}`;
+  document.getElementById('procValue').textContent   = procs;
+  document.getElementById('marginValue').textContent = `$${margin}`;
+  document.getElementById('roiMonths').textContent   = `Окупаемость: ${months} мес.`;
+  document.getElementById('monthlyProfit').textContent = `Месячная прибыль: $${monthly.toLocaleString()}`;
+  document.getElementById('yearlyProfit').textContent  = `Годовая прибыль: $${yearly.toLocaleString()}`;
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  // инициализируем все калькуляторы
-  $$('.roi-calculator',true).forEach(initROI);
+  // инициализируем базовые калькуляторы
+  $$('.roi-calculator:not(.roi-advanced)',true).forEach(initROI);
+
+  // продвинутый ROI-калькулятор
+  if($('.roi-advanced')){
+    priceSlider = document.getElementById('priceSlider');
+    procSlider  = document.getElementById('procSlider');
+    marginSlider = document.getElementById('marginSlider');
+    priceInput  = document.getElementById('priceInput');
+    procInput   = document.getElementById('procInput');
+    marginInput = document.getElementById('marginInput');
+
+    const pairs = [
+      [priceSlider, priceInput],
+      [procSlider,  procInput],
+      [marginSlider, marginInput]
+    ];
+    pairs.forEach(([slider,input])=>{
+      if(slider && input){
+        slider.addEventListener('input',()=>{input.value=slider.value;updateROI();});
+        input.addEventListener('input',()=>{slider.value=input.value;updateROI();});
+      }
+    });
+    updateROI();
+  }
 
   // ----------------  SMOOTH SCROLL (offset для fixed header) -------------
   $$('a[href^="#"]',true).forEach(a=>{
