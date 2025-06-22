@@ -571,15 +571,24 @@
                 <div class="roi-calculator roi-advanced">
                     <div class="roi-input-group">
                         <label for="priceSlider">Стоимость оборудования: <span class="value" id="priceValue"></span></label>
-                        <input type="range" id="priceSlider" min="1000" max="100000" step="1000" value="10000">
+                        <div class="roi-controls">
+                            <input type="range" id="priceSlider" min="1000" max="500000" step="1000" value="10000">
+                            <input type="number" class="manual-input" id="priceInput" min="1000" max="500000" step="1000" value="10000">
+                        </div>
                     </div>
                     <div class="roi-input-group">
                         <label for="procSlider">Кол-во процедур в месяц: <span class="value" id="procValue"></span></label>
-                        <input type="range" id="procSlider" min="1" max="1000" step="1" value="1">
+                        <div class="roi-controls">
+                            <input type="range" id="procSlider" min="1" max="1000" step="1" value="1">
+                            <input type="number" class="manual-input" id="procInput" min="1" max="1000" step="1" value="1">
+                        </div>
                     </div>
                     <div class="roi-input-group">
                         <label for="marginSlider">Средняя маржа ($): <span class="value" id="marginValue"></span></label>
-                        <input type="range" id="marginSlider" min="1" max="500" step="1" value="1">
+                        <div class="roi-controls">
+                            <input type="range" id="marginSlider" min="1" max="1000" step="1" value="1">
+                            <input type="number" class="manual-input" id="marginInput" min="1" max="1000" step="1" value="1">
+                        </div>
                     </div>
                     <p id="roiMonths">Окупаемость: 0 мес.</p>
                     <p id="monthlyProfit">Месячная прибыль: $0</p>

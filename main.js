@@ -47,11 +47,16 @@ function initROI(calcEl){
   update();
 }
 
+let priceSlider, procSlider, marginSlider;
+let priceInput, procInput, marginInput;
+
 function updateROI(){
-  const price  = +document.getElementById('priceSlider').value;
-  const procs  = +document.getElementById('procSlider').value;
-  const margin = +document.getElementById('marginSlider').value;
-  const base = price * procs;
+  const price  = +priceSlider.value;
+  const procs  = +procSlider.value;
+  const margin = +marginSlider.value;
+  priceInput.value = price;
+  procInput.value  = procs;
+  marginInput.value = margin;
   const months = Math.ceil(price / (procs * margin));
   const monthly = procs * margin;
   const yearly = monthly * 12;
@@ -69,9 +74,23 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // продвинутый ROI-калькулятор
   if($('.roi-advanced')){
-    ['priceSlider','procSlider','marginSlider'].forEach(id=>{
-      const el = document.getElementById(id);
-      if(el) el.addEventListener('input',updateROI);
+    priceSlider = document.getElementById('priceSlider');
+    procSlider  = document.getElementById('procSlider');
+    marginSlider = document.getElementById('marginSlider');
+    priceInput  = document.getElementById('priceInput');
+    procInput   = document.getElementById('procInput');
+    marginInput = document.getElementById('marginInput');
+
+    const pairs = [
+      [priceSlider, priceInput],
+      [procSlider,  procInput],
+      [marginSlider, marginInput]
+    ];
+    pairs.forEach(([slider,input])=>{
+      if(slider && input){
+        slider.addEventListener('input',()=>{input.value=slider.value;updateROI();});
+        input.addEventListener('input',()=>{slider.value=input.value;updateROI();});
+      }
     });
     updateROI();
   }
