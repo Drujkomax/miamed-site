@@ -1,0 +1,9 @@
+@font-face {
+	font-family: 'KB Astrolyte';
+	src: url('../fonts/kb_astrolyte.eot'); /* IE 9 Compatibility Mode */
+	src: url('../fonts/kb_astrolyte.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+		url('../fonts/kb_astrolyte.woff2') format('woff2'), /* Super Modern Browsers */
+		url('../fonts/kb_astrolyte.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+		url('../fonts/kb_astrolyte.ttf') format('truetype'), /* Safari, Android, iOS */
+		url('../fonts/kb_astrolyte.svg#kb_astrolyte') format('svg'); /* Chrome < 4, Legacy iOS */
+}
